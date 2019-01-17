@@ -1,0 +1,122 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class Person
+{
+    public:
+    string name,DOB;
+
+    Person(string a,string b)
+    {
+        name=a;
+        DOB=b;
+    }
+    void Show_Person_Name()
+    {
+        cout<<name<<endl;
+    }
+};
+
+class Customer : public Person
+{
+    public:
+
+    int catagory;
+    string Customer_ID,sex;
+
+    Customer(string a,string b,string c,string d,int x) : Person(a,b)
+    {
+        Customer_ID=c;
+        sex=d;
+        catagory=x;
+    }
+
+    void Show_CustomerINFO()
+    {
+        if(catagory == 1)
+            cout<<"Hey champ , ";
+        else if(catagory == 2)
+            cout<<"Hello sir , ";
+        else if(catagory == 3)
+            cout<<"Hello mem , ";
+        cout<<"Customer ID : "<<Customer_ID<<endl;
+    }
+};
+
+class Product;
+
+class SuperShop
+{
+public:
+    string Product_Name,Product_Catagory;
+    int Product_Quantity;
+    void getInfo(string a,string x,int b)
+    {
+        Product_Name=a;
+        Product_Catagory=x;
+        Product_Quantity=b;
+    }
+    friend bool Process(SuperShop,Product);
+};
+
+class Product : SuperShop
+{
+public:
+    double price;
+    void getData(string a,string x,int b,double c)
+    {
+        getInfo(a,x,b);
+        price=c;
+    }
+    friend bool Process(SuperShop,Product);
+};
+
+bool Process(SuperShop A,Product B)
+{
+    if(A.Product_Catagory==B.Product_Catagory && A.Product_Name==B.Product_Name && A.Product_Quantity<=B.Product_Quantity)
+    {
+        cout << "Your cost for " << B.Product_Quantity << " " << A.Product_Name << " is : " <<  A.Product_Quantity*B.price << " tk" << endl;
+        cout<<"Thank You for shopping with us.\n";
+        cout<<"Your shopping is successfully done! Thank u." << endl;
+        return 1;
+    }
+    else
+    {
+        if(A.Product_Quantity > B.Product_Quantity)
+            cout << "We are out of stock" << endl;
+
+        return 0;
+    }
+}
+int main()
+{
+    Product p[5];
+    int i;
+
+    p[0].getData("Fish Nuggets","Food",5,270.00);
+    p[1].getData("Butter","Food",5,12.50);
+    p[2].getData("T-Shirt","Garments",5,500.00);
+    p[3].getData("Brinjal","Vegetables",5,279.50);
+    p[4].getData("Body Spray","Cosmetics",5,295.00);
+
+    Customer One("Eyasin Arafat","10/06/1996","12345","Male", 2 );
+
+    SuperShop Shopno;
+    Shopno.getInfo( "Butter" , "Food" , 4 );
+
+    bool Available=false;
+
+    for(i=0; i<5; i++)
+    {
+        if(Process(Shopno,p[i]))
+        {
+            Available=true;
+        }
+    }
+    if(!Available)
+    {
+        One.Show_CustomerINFO();
+        cout<<"Sorry dear sir/madam! We don't have these product. Please try again later." << endl;
+    }
+    return 0;
+}
